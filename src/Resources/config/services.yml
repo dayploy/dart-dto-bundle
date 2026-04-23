@@ -1,0 +1,73 @@
+services:
+    Dayploy\DartDtoBundle\Generator\EntityGenerator:
+        public: true
+        class: "Dayploy\\DartDtoBundle\\Generator\\EntityGenerator"
+        arguments:
+            - '%dayploy.dart_dto.source_directory%'
+            - '%dayploy.dart_dto.destination_directory%'
+            - '@logger'
+            - '@Dayploy\DartDtoBundle\Generator\ContentCleaner'
+            - '@Dayploy\DartDtoBundle\Generator\ClassGenerator'
+            - '@Dayploy\DartDtoBundle\Generator\EnumGenerator'
+    Dayploy\DartDtoBundle\Generator\EnumGenerator:
+        public: true
+        class: "Dayploy\\DartDtoBundle\\Generator\\EnumGenerator"
+    Dayploy\DartDtoBundle\Generator\ClassGenerator:
+        public: true
+        class: "Dayploy\\DartDtoBundle\\Generator\\ClassGenerator"
+        arguments:
+            - '@logger'
+            - '@Dayploy\DartDtoBundle\Generator\Extractor'
+            - '@Dayploy\DartDtoBundle\Generator\TypeGenerator'
+            - '@Dayploy\DartDtoBundle\Generator\FilenameService'
+            - '@Dayploy\DartDtoBundle\Generator\ConstructorTypeGenerator'
+            - '@Dayploy\DartDtoBundle\Generator\ToJsonTypeGenerator'
+    Dayploy\DartDtoBundle\Generator\Generator:
+        public: true
+        class: "Dayploy\\DartDtoBundle\\Generator\\Generator"
+        arguments:
+            - '@Dayploy\DartDtoBundle\Generator\EntityGenerator'
+    Dayploy\DartDtoBundle\Generator\FilenameService:
+        public: true
+        class: "Dayploy\\DartDtoBundle\\Generator\\FilenameService"
+        arguments:
+            - '%dayploy.dart_dto.model_path%'
+    Dayploy\DartDtoBundle\Generator\TypeGenerator:
+        public: true
+        class: "Dayploy\\DartDtoBundle\\Generator\\TypeGenerator"
+        arguments:
+            - '@Dayploy\DartDtoBundle\Generator\TypeConverter'
+    Dayploy\DartDtoBundle\Generator\ToJsonTypeGenerator:
+        public: true
+        class: "Dayploy\\DartDtoBundle\\Generator\\ToJsonTypeGenerator"
+        arguments:
+            - '@Dayploy\DartDtoBundle\Generator\ToJsonTypeConverter'
+
+    Dayploy\DartDtoBundle\Generator\ConstructorTypeGenerator:
+        public: true
+        class: "Dayploy\\DartDtoBundle\\Generator\\ConstructorTypeGenerator"
+        arguments:
+            - '@Dayploy\DartDtoBundle\Generator\TypeConverter'
+    Dayploy\DartDtoBundle\Generator\TypeConverter:
+        public: true
+        class: "Dayploy\\DartDtoBundle\\Generator\\TypeConverter"
+        arguments:
+            - '@Dayploy\DartDtoBundle\Generator\FilenameService'
+    Dayploy\DartDtoBundle\Generator\ToJsonTypeConverter:
+        public: true
+        class: "Dayploy\\DartDtoBundle\\Generator\\ToJsonTypeConverter"
+        arguments:
+            - '@Dayploy\DartDtoBundle\Generator\FilenameService'
+    Dayploy\DartDtoBundle\Generator\Extractor:
+        public: true
+        class: "Dayploy\\DartDtoBundle\\Generator\\Extractor"
+    Dayploy\DartDtoBundle\Generator\ContentCleaner:
+        public: true
+        class: "Dayploy\\DartDtoBundle\\Generator\\ContentCleaner"
+    Dayploy\DartDtoBundle\Command\EntitiesCommand:
+        public: true
+        class: "Dayploy\\DartDtoBundle\\Command\\EntitiesCommand"
+        arguments:
+            - '@Dayploy\DartDtoBundle\Generator\Generator'
+        tags:
+            - { name: 'console.command', command: 'generate:jsdto' }
