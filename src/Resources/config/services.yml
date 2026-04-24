@@ -70,4 +70,4 @@ services:
         arguments:
             - '@Dayploy\DartDtoBundle\Generator\Generator'
         tags:
-            - { name: 'console.command', command: 'generate:jsdto' }
+            - { name: 'console.command', command: 'generate:dartdto' }
