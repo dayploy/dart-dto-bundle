@@ -86,9 +86,11 @@ class FromJsonTypeConverter
                 return $str;
             case BackedEnumType::class:
                 /** @var BackedEnumType $type */
-                return $this->filenameService->getObjectFromClassname(
+                $classname =  $this->filenameService->getObjectFromClassname(
                     classname: $type->getClassName(),
                 );
+
+                return sprintf('%s.fromValue(json[\'%s\'])', $classname, $fieldName);
             case EnumType::class:
                 /** @var EnumType $type */
                 return '\\' . $type->getClassName();
