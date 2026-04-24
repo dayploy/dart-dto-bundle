@@ -6,7 +6,7 @@ use Symfony\Component\TypeInfo\Type;
 
 class TypeGenerator
 {
-    private static string $template = '  final <type> <fieldName>;';
+    private static string $template = '  late final <type> <fieldName>;';
 
     public function __construct(
         private TypeConverter $typeConverter,

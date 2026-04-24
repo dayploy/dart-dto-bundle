@@ -6,7 +6,10 @@ use Symfony\Component\TypeInfo\Type;
 
 class FromJsonTypeGenerator
 {
-    private static string $template = '      <fieldName>: <type>,';
+    private static string $template = '
+    if (json.containsKey(\'<fieldName>\')) {
+      entity.<fieldName> = <type>;
+    }';
 
     public function __construct(
         private FromJsonTypeConverter $typeConverter,
