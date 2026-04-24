@@ -60,7 +60,6 @@ class FilenameService
         string $classname,
         string $prefixToRemove,
     ): string {
-        dump($classname);
         $classname = str_replace(
             $prefixToRemove,
             '',
