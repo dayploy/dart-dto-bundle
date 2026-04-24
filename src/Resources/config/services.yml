@@ -22,6 +22,7 @@ services:
             - '@Dayploy\DartDtoBundle\Generator\FilenameService'
             - '@Dayploy\DartDtoBundle\Generator\ConstructorTypeGenerator'
             - '@Dayploy\DartDtoBundle\Generator\ToJsonTypeGenerator'
+            - '@Dayploy\DartDtoBundle\Generator\FromJsonTypeGenerator'
     Dayploy\DartDtoBundle\Generator\Generator:
         public: true
         class: "Dayploy\\DartDtoBundle\\Generator\\Generator"
@@ -42,7 +43,11 @@ services:
         class: "Dayploy\\DartDtoBundle\\Generator\\ToJsonTypeGenerator"
         arguments:
             - '@Dayploy\DartDtoBundle\Generator\ToJsonTypeConverter'
-
+    Dayploy\DartDtoBundle\Generator\FromJsonTypeGenerator:
+        public: true
+        class: "Dayploy\\DartDtoBundle\\Generator\\FromJsonTypeGenerator"
+        arguments:
+            - '@Dayploy\DartDtoBundle\Generator\FromJsonTypeConverter'
     Dayploy\DartDtoBundle\Generator\ConstructorTypeGenerator:
         public: true
         class: "Dayploy\\DartDtoBundle\\Generator\\ConstructorTypeGenerator"
@@ -58,6 +63,12 @@ services:
         class: "Dayploy\\DartDtoBundle\\Generator\\ToJsonTypeConverter"
         arguments:
             - '@Dayploy\DartDtoBundle\Generator\FilenameService'
+    Dayploy\DartDtoBundle\Generator\FromJsonTypeConverter:
+        public: true
+        class: "Dayploy\\DartDtoBundle\\Generator\\FromJsonTypeConverter"
+        arguments:
+            - '@Dayploy\DartDtoBundle\Generator\FilenameService'
+
     Dayploy\DartDtoBundle\Generator\Extractor:
         public: true
         class: "Dayploy\\DartDtoBundle\\Generator\\Extractor"

@@ -17,16 +17,25 @@ class <entityClassName> {
   <entityClassName>({
 <constructorParameters>
   });
-<generateToJson>
+<generateFromJson><generateToJson>
 }
 ';
 
-    private static string $toJsonTemplate = '
+    private static string $toJsonTemplate ='
 
   Map<String, dynamic> toJson() {
     return {
 <parameters>
     };
+  }
+';
+
+    private static string $fromJsonTemplate = '
+
+  factory <entityClassName>.fromJson(Map<String, dynamic> json) {
+    return <entityClassName>(
+<generateFromJsonParameters>
+    );
   }
 ';
 
@@ -37,11 +46,13 @@ class <entityClassName> {
         private FilenameService $filenameService,
         private ConstructorTypeGenerator $constructorTypeGenerator,
         private ToJsonTypeGenerator $toJsonTypeGenerator,
+        private FromJsonTypeGenerator $fromJsonTypeGenerator,
     ) {}
 
     public function generateEntityClass(
         ReflectionClass $reflectionClass,
         bool $generateToJson,
+        bool $generateFromJson,
     ): string {
         $placeHolders = [
             '<imports>',
@@ -50,8 +61,9 @@ class <entityClassName> {
             '<entityBody>',
             '<constructorParameters>',
             '<generateToJson>',
+            '<generateFromJson>',
         ];
-
+        $entityClassName = $reflectionClass->getShortName();
         $bodyReplacement = $this->generateEntityBody($reflectionClass);
         $constructorParametersReplacement = $this->generateEntityConstructorParameters($reflectionClass);
 
@@ -63,7 +75,14 @@ class <entityClassName> {
             ], static::$toJsonTemplate);
         }
 
-        $entityClassName = $reflectionClass->getShortName();
+        $generateFromJsonString = '';
+        if ($generateFromJson) {
+            $fromJsonParametersReplacement = $this->generateFromJsonParameters($reflectionClass);
+            $generateFromJsonString = str_replace(['<entityClassName>','<generateFromJsonParameters>'], [
+                $entityClassName,
+                $fromJsonParametersReplacement,
+            ], static::$fromJsonTemplate);
+        }
 
         $importStrings = '';
 
@@ -85,6 +104,7 @@ class <entityClassName> {
             $bodyReplacement,
             $constructorParametersReplacement,
             $generateToJsonString,
+            $generateFromJsonString,
         ], static::$classTemplate);
     }
 
@@ -169,6 +189,33 @@ class <entityClassName> {
         return implode("\n\n", array_filter($properties));
     }
 
+     protected function generateFromJsonProperty(
+        ReflectionClass $reflectionClass,
+    ): string {
+        $properties = [];
+
+        foreach ($reflectionClass->getProperties() as $property) {
+            $propertyName = $property->getName();
+            $this->logger->info('PROPERTY: ' . $propertyName);
+
+            $attributes = $property->getAttributes();
+            if (!$this->isPropertyIncluded($attributes)) {
+                $this->logger->info('IGNORED');
+                continue;
+            }
+
+            $type = $this->extractor->getType($reflectionClass->getName(), $propertyName);
+
+            // the mixed type gives a null value
+            if (null === $type) {
+                continue;
+            }
+            $properties[] = $this->fromJsonTypeGenerator->generate($propertyName, $type);
+        }
+
+        return implode("\n\n", array_filter($properties));
+    }
+
     protected function generateEntityBody(
         ReflectionClass $reflectionClass,
     ): string {
@@ -206,6 +253,21 @@ class <entityClassName> {
 
         // EnumType
         $stubMethods = $this->generateToJsonProperty($reflectionClass);
+
+        if ($stubMethods) {
+            $code[] = $stubMethods;
+        }
+
+        return implode("\n", $code);
+    }
+
+    protected function generateFromJsonParameters(
+        ReflectionClass $reflectionClass,
+    ): string {
+        $code = [];
+
+        // EnumType
+        $stubMethods = $this->generateFromJsonProperty($reflectionClass);
 
         if ($stubMethods) {
             $code[] = $stubMethods;

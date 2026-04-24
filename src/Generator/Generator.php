@@ -23,6 +23,7 @@ class Generator
             $this->entityGenerator->writeEntityClass(
                 $reflectionClass['class'],
                 $reflectionClass['generateToJson'],
+                $reflectionClass['generateFromJson'],
             );
         }
     }

@@ -20,6 +20,7 @@ class EntityGenerator
     public function writeEntityClass(
         ReflectionClass $reflectionClass,
         bool $generateToJson,
+        bool $generateFromJson,
     ): void {
         $this->logger->info('CLASS: '.$reflectionClass->getName());
 
@@ -31,6 +32,7 @@ class EntityGenerator
             $content = $this->classGenerator->generateEntityClass(
                 $reflectionClass,
                 $generateToJson,
+                $generateFromJson,
             );
         }
 

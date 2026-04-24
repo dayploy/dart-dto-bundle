@@ -20,9 +20,15 @@ class AnnotationCollectionFactory
                     $generateToJson = $arguments['generateToJson'];
                 }
 
+                $generateFromJson = false;
+                if (key_exists('generateFromJson', $arguments)) {
+                    $generateFromJson = $arguments['generateFromJson'];
+                }
+
                 $classes[$className] = [
                     'class' => $reflectionClass,
                     'generateToJson' => $generateToJson,
+                    'generateFromJson' => $generateFromJson,
                 ];
             }
         }
