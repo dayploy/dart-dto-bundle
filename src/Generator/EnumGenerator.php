@@ -13,6 +13,11 @@ enum <entityClassName> {
 
   final String value;
   const <entityClassName>(this.value);
+
+
+  factory <entityClassName>.fromValue(String value) {
+    return <entityClassName>.values.firstWhere((e) => e.value == value);
+  }
 }
 ';
 
