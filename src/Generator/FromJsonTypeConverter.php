@@ -121,7 +121,11 @@ class FromJsonTypeConverter
                 return $this->convertType($fieldName, $type->getWrappedType());
             case NullableType::class:
                 /** @var NullableType $type */
-                return $this->convertType($fieldName, $type->getWrappedType()) . '?';
+                return sprintf(
+                    'json.containsKey(\'%s\') ? %s : null',
+                    $fieldName,
+                    $this->convertType($fieldName, $type->getWrappedType()),
+                );
         }
 
         throw new \LogicException('Class ' . $type::class . ' not handled');
