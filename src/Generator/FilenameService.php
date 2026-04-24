@@ -41,6 +41,11 @@ class FilenameService
         $this->imports['uuid'] = 'package:uuid/uuid_value.dart';
     }
 
+    public function addApiDateServiceImport(): void
+    {
+        $this->imports['api_date_service'] = '/services/api_date_service.dart';
+    }
+
     public function getObjectFromClassname(
         string $classname,
     ): string {

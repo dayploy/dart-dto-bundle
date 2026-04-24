@@ -6,7 +6,7 @@ use Symfony\Component\TypeInfo\Type;
 
 class ToJsonTypeGenerator
 {
-    private static string $template = '      "<fieldName>": <fieldName><type>,';
+    private static string $template = '      "<fieldName>": <type>,';
 
     public function __construct(
         private ToJsonTypeConverter $typeConverter,
@@ -18,7 +18,10 @@ class ToJsonTypeGenerator
         Type $type,
     ): string {
         $replacements = [
-            '<type>' => $this->typeConverter->convertType($type),
+            '<type>' => $this->typeConverter->convertType(
+                fieldName: $fieldName,
+                type: $type,
+            ),
             '<fieldName>' => $fieldName,
         ];
 

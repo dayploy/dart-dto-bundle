@@ -25,19 +25,21 @@ class ToJsonTypeConverter
     }
 
     public function convertType(
+        string $fieldName,
         Type $type,
     ): string {
         switch ($type::class) {
             case ObjectType::class:
                 /** @var ObjectType $type */
                 if ($type->getClassName() === Uuid::class) {
-                    return '.toString()';
+                    return $fieldName.'.toString()';
                 }
                 if ($type->getClassName() === Collection::class) {
                     return 'List';
                 }
                 if ($type->getClassName() === DateTimeImmutable::class) {
-                    return 'DateTime';
+                    $this->filenameService->addApiDateServiceImport();
+                    return 'ApiDateService.convertToApi('.$fieldName.')';
                 }
 
                 if ($type->getClassName() === UploadedFile::class) {
@@ -53,19 +55,19 @@ class ToJsonTypeConverter
             case BuiltinType::class:
                 /** @var BuiltinType $type */
                 if ($type->getTypeIdentifier()->value === 'int') {
-                    return '';
+                    return $fieldName;
                 }
                 if ($type->getTypeIdentifier()->value === 'float') {
-                    return '';
+                    return $fieldName;
                 }
                 if ($type->getTypeIdentifier()->value === 'array') {
-                    return 'List';
+                    return $fieldName.'.map((e) => e.toJson()).toList()';
                 }
                 if ($type->getTypeIdentifier()->value === 'bool') {
-                    return '';
+                    return $fieldName;
                 }
                 if ($type->getTypeIdentifier()->value === 'string') {
-                    return '';
+                    return $fieldName;
                 }
 
                 return $type->__toString();
@@ -74,7 +76,7 @@ class ToJsonTypeConverter
                 $types = $type->getTypes();
                 $str = '';
                 foreach ($types as $index => $subType) {
-                    $str .= $this->convertType($subType);
+                    $str .= $this->convertType($fieldName, $subType);
                     if (($index + 1) < count($types)) {
                         $str .= ' | ';
                     }
@@ -83,36 +85,35 @@ class ToJsonTypeConverter
                 return $str;
             case BackedEnumType::class:
                 /** @var BackedEnumType $type */
-                return $this->filenameService->getObjectFromClassname(
-                    classname: $type->getClassName(),
-                );
+                return $fieldName.'.name';
             case EnumType::class:
                 /** @var EnumType $type */
                 return '\\'.$type->getClassName();
             case CollectionType::class:
                 /** @var CollectionType $type */
                 if ($type->isList()) {
-                    return $this->convertType($type->getWrappedType());
+                    return $this->convertType($fieldName, $type->getWrappedType());
                 }
 
-                return $this->convertType($type->getWrappedType());
+                return $this->convertType($fieldName, $type->getWrappedType());
             case GenericType::class:
                 /** @var GenericType $type */
-                $variableType = $type->getVariableTypes() ? $type->getVariableTypes()[1] : null;
-                $variableTypePrefix = '';
-                if ($variableType) {
-                    $variableTypePrefix =  '<'.$this->convertType($variableType).'>';
-                }
-
-                return $this->convertType($type->getWrappedType()).$variableTypePrefix;
+                return $this->convertType($fieldName, $type->getWrappedType());
             case NullableType::class:
-                $convertedType = $this->convertType($type->getWrappedType());
-                if ($convertedType === '') {
-                    return '';
+                $wrappedType = $type->getWrappedType();
+
+                if ($wrappedType instanceof ObjectType && $wrappedType->getClassName() === DateTimeImmutable::class) {
+                    return $this->convertType($fieldName, $wrappedType);
+                }
+                if ($wrappedType instanceof BuiltinType && $wrappedType->getTypeIdentifier()->value === 'string') {
+                    return $fieldName;
+                }
+                if ($wrappedType instanceof BuiltinType && $wrappedType->getTypeIdentifier()->value === 'int') {
+                    return $fieldName;
                 }
 
                 /** @var NullableType $type */
-                return '?'.$this->convertType($type->getWrappedType());
+                return $this->convertType($fieldName, $type->getWrappedType()).'?';
         }
 
         throw new \LogicException('Class '.$type::class.' not handled');
