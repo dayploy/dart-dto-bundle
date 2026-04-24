@@ -32,13 +32,14 @@ class FromJsonTypeConverter
                 /** @var ObjectType $type */
                 if ($type->getClassName() === Uuid::class) {
                     $this->filenameService->addUuidImport();
-                    return sprintf('json[\'%s\'] as %s', $fieldName, 'UuidValue');
+                    return sprintf('UuidValue.fromString(json[\'%s\'] as String)', $fieldName, 'UuidValue');
                 }
                 if ($type->getClassName() === Collection::class) {
                     return 'List';
                 }
                 if ($type->getClassName() === DateTimeImmutable::class) {
-                    return 'DateTime';
+                    $this->filenameService->addApiDateServiceImport();
+                    return sprintf('DateTime.parse(json[\'%s\'] as String)', $fieldName);
                 }
 
                 if ($type->getClassName() === UploadedFile::class) {
@@ -121,6 +122,19 @@ class FromJsonTypeConverter
                 return $this->convertType($fieldName, $type->getWrappedType());
             case NullableType::class:
                 /** @var NullableType $type */
+                $wrappedType = $type->getWrappedType();
+
+                if ($wrappedType instanceof ObjectType && $wrappedType->getClassName() === DateTimeImmutable::class) {
+                    return sprintf(
+                        'json.containsKey(\'%s\') && json[\'%s\'] != null
+          ? DateTime.tryParse(json[\'%s\'] as String)
+          : null',
+                        $fieldName,
+                        $fieldName,
+                        $fieldName
+                    );
+                }
+
                 return sprintf(
                     'json.containsKey(\'%s\') ? %s : null',
                     $fieldName,
