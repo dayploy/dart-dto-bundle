@@ -62,7 +62,7 @@ class ToJsonTypeConverter
                     return 'List';
                 }
                 if ($type->getTypeIdentifier()->value === 'bool') {
-                    return 'bool';
+                    return '';
                 }
                 if ($type->getTypeIdentifier()->value === 'string') {
                     return '';
@@ -106,8 +106,13 @@ class ToJsonTypeConverter
 
                 return $this->convertType($type->getWrappedType()).$variableTypePrefix;
             case NullableType::class:
+                $convertedType = $this->convertType($type->getWrappedType());
+                if ($convertedType === '') {
+                    return '';
+                }
+
                 /** @var NullableType $type */
-                return $this->convertType($type->getWrappedType()).'?';
+                return '?'.$this->convertType($type->getWrappedType());
         }
 
         throw new \LogicException('Class '.$type::class.' not handled');
