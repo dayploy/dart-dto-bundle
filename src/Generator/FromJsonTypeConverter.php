@@ -104,12 +104,10 @@ class FromJsonTypeConverter
                 );
 
                 return sprintf(
-                    'json.containsKey(\'%s\')
-                            ? (json[\'%s\'] as List<dynamic>)
-                                    .map((e) => %s.fromJson(e as Map<String, dynamic>))
-                                    .toList()
-                            : []',
-                    $fieldName,
+                    '(json[\'%s\'] as List<dynamic>)
+            .map((e) => %s.fromJson(e as Map<String, dynamic>))
+            .toList()
+                            ',
                     $fieldName,
                     $classname
                 );
@@ -126,7 +124,7 @@ class FromJsonTypeConverter
 
                 if ($wrappedType instanceof ObjectType && $wrappedType->getClassName() === DateTimeImmutable::class) {
                     return sprintf(
-                        'json.containsKey(\'%s\') && json[\'%s\'] != null
+                        'json[\'%s\'] != null
           ? DateTime.tryParse(json[\'%s\'] as String)
           : null',
                         $fieldName,
@@ -136,7 +134,7 @@ class FromJsonTypeConverter
                 }
 
                 return sprintf(
-                    'json.containsKey(\'%s\') ? %s : null',
+                    'json[\'%s\'] != null ? %s : null',
                     $fieldName,
                     $this->convertType($fieldName, $type->getWrappedType()),
                 );

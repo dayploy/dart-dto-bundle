@@ -85,7 +85,7 @@ class ToJsonTypeConverter
                 return $str;
             case BackedEnumType::class:
                 /** @var BackedEnumType $type */
-                return $fieldName.'.name';
+                return $fieldName.'.value';
             case EnumType::class:
                 /** @var EnumType $type */
                 return '\\'.$type->getClassName();

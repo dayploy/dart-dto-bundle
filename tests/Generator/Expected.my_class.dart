@@ -4,16 +4,16 @@ import '/model/dayploy/dart_dto_bundle/tests/src/entity/int_values_enum.dart';
 import '/model/dayploy/dart_dto_bundle/tests/src/entity/string_values_enum.dart';
 
 class MyClass {
-  final UuidValue id;
-  final int numberInt;
-  final double numberFloat;
-  final DateTime maDate;
-  final String name;
-  final String? nullableString;
-  final List<ForeignClass> foreignClasses;
-  final List<int> references;
-  final IntValuesEnum intEnum;
-  final StringValuesEnum stringEnum;
+  late final UuidValue id;
+  late final int numberInt;
+  late final double numberFloat;
+  late final DateTime maDate;
+  late final String name;
+  late final String? nullableString;
+  late final List<ForeignClass> foreignClasses;
+  late final List<int> references;
+  late final IntValuesEnum intEnum;
+  late final StringValuesEnum stringEnum;
 
   MyClass({
     required this.id,
@@ -27,4 +27,5 @@ class MyClass {
     required this.intEnum,
     required this.stringEnum,
   });
+
 }
