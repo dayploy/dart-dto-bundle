@@ -7,7 +7,7 @@ use Symfony\Component\Uid\Uuid;
 use Dayploy\DartDtoBundle\Attributes\DartDto;
 use Dayploy\DartDtoBundle\Attributes\DartDtoIgnore;
 
-#[DartDto]
+#[DartDto(generateToJson: true)]
 class MyClass
 {
     private Uuid $id;
@@ -30,6 +30,8 @@ class MyClass
 
     private IntValuesEnum $intEnum;
     private StringValuesEnum $stringEnum;
+
+    private ?StringValuesEnum $stringEnumNullable;
 
     #[DartDtoIgnore]
     private string $propertyToIgnore;

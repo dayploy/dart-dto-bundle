@@ -2,6 +2,7 @@ import 'package:uuid/uuid_value.dart';
 import '/model/dayploy/dart_dto_bundle/tests/src/entity/foreign_class.dart';
 import '/model/dayploy/dart_dto_bundle/tests/src/entity/int_values_enum.dart';
 import '/model/dayploy/dart_dto_bundle/tests/src/entity/string_values_enum.dart';
+import '/services/api_date_service.dart';
 
 class MyClass {
   late final UuidValue id;
@@ -14,6 +15,7 @@ class MyClass {
   late final List<int> references;
   late final IntValuesEnum intEnum;
   late final StringValuesEnum stringEnum;
+  late final StringValuesEnum? stringEnumNullable;
 
   MyClass({
     required this.id,
@@ -26,6 +28,22 @@ class MyClass {
     required this.references,
     required this.intEnum,
     required this.stringEnum,
+    this.stringEnumNullable,
   });
 
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id.toString(),
+      "numberInt": numberInt,
+      "numberFloat": numberFloat,
+      "maDate": ApiDateService.convertToApi(maDate),
+      "name": name,
+      "nullableString": nullableString,
+      "foreignClasses": List,
+      "references": references.map((e) => e.toJson()).toList(),
+      "intEnum": intEnum.value,
+      "stringEnum": stringEnum.value,
+      "stringEnumNullable": stringEnumNullable?.value,
+    };
+  }
 }

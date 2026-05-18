@@ -18,7 +18,7 @@ class AnnotationCollectionFactoryTest extends KernelTestCase
         $this->assertArrayHasKey(MyClass::class, $classes);
         $firstClass = $classes[MyClass::class]['class'];
 
-        $this->assertCount(11, $firstClass->getProperties());
+        $this->assertCount(12, $firstClass->getProperties());
         $this->assertCount(1, $firstClass->getAttributes());
         $this->assertSame(DartDto::class, $firstClass->getAttributes()[0]->getName());
     }
