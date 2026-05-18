@@ -111,6 +111,9 @@ class ToJsonTypeConverter
                 if ($wrappedType instanceof BuiltinType && $wrappedType->getTypeIdentifier()->value === 'int') {
                     return $fieldName;
                 }
+                if ($wrappedType instanceof BackedEnumType) {
+                    return $fieldName.'?.value';
+                }
 
                 /** @var NullableType $type */
                 return $this->convertType($fieldName, $type->getWrappedType()).'?';
