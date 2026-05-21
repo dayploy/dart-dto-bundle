@@ -23,6 +23,8 @@ class MyClass
      */
     private Collection $foreignClasses;
 
+    private ForeignClass $singleForeignClass;
+
     /**
      * @var array<int>
      */

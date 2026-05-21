@@ -49,9 +49,7 @@ class ToJsonTypeConverter
                     return 'String';
                 }
 
-                return $this->filenameService->getObjectFromClassname(
-                    classname: $type->getClassName(),
-                );
+                return $fieldName.'.toJson()';
             case BuiltinType::class:
                 /** @var BuiltinType $type */
                 if ($type->getTypeIdentifier()->value === 'int') {

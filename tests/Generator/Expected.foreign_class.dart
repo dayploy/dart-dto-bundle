@@ -10,4 +10,10 @@ class ForeignClass {
     this.myClass,
   });
 
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id.toString(),
+      "myClass": myClass.toJson()?,
+    };
+  }
 }
