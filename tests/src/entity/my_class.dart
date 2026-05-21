@@ -12,6 +12,7 @@ class MyClass {
   late final String name;
   late final String? nullableString;
   late final List<ForeignClass> foreignClasses;
+  late final ForeignClass singleForeignClass;
   late final List<int> references;
   late final IntValuesEnum intEnum;
   late final StringValuesEnum stringEnum;
@@ -25,6 +26,7 @@ class MyClass {
     required this.name,
     this.nullableString,
     required this.foreignClasses,
+    required this.singleForeignClass,
     required this.references,
     required this.intEnum,
     required this.stringEnum,
@@ -40,6 +42,7 @@ class MyClass {
       "name": name,
       "nullableString": nullableString,
       "foreignClasses": List,
+      "singleForeignClass": singleForeignClass.toJson(),
       "references": references.map((e) => e.toJson()).toList(),
       "intEnum": intEnum.value,
       "stringEnum": stringEnum.value,
