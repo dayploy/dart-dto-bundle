@@ -103,6 +103,9 @@ class ToJsonTypeConverter
                 if ($wrappedType instanceof ObjectType && $wrappedType->getClassName() === DateTimeImmutable::class) {
                     return $this->convertType($fieldName, $wrappedType);
                 }
+                if ($wrappedType instanceof ObjectType && $wrappedType->getClassName() === Uuid::class) {
+                    return $fieldName.'?.toString()';
+                }
                 if ($wrappedType instanceof BuiltinType && $wrappedType->getTypeIdentifier()->value === 'string') {
                     return $fieldName;
                 }

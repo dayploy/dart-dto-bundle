@@ -17,6 +17,7 @@ class MyClass {
   late final IntValuesEnum intEnum;
   late final StringValuesEnum stringEnum;
   late final StringValuesEnum? stringEnumNullable;
+  late final UuidValue? uuidNullable;
 
   MyClass({
     required this.id,
@@ -31,6 +32,7 @@ class MyClass {
     required this.intEnum,
     required this.stringEnum,
     this.stringEnumNullable,
+    this.uuidNullable,
   });
 
   Map<String, dynamic> toJson() {
@@ -47,6 +49,7 @@ class MyClass {
       "intEnum": intEnum.value,
       "stringEnum": stringEnum.value,
       "stringEnumNullable": stringEnumNullable?.value,
+      "uuidNullable": uuidNullable?.toString(),
     };
   }
 }
