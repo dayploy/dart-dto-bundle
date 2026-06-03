@@ -34,9 +34,6 @@ class ToJsonTypeConverter
                 if ($type->getClassName() === Uuid::class) {
                     return $fieldName.'.toString()';
                 }
-                if ($type->getClassName() === Collection::class) {
-                    return 'List';
-                }
                 if ($type->getClassName() === DateTimeImmutable::class) {
                     $this->filenameService->addApiDateServiceImport();
                     return 'ApiDateService.convertToApi('.$fieldName.')';
@@ -59,7 +56,7 @@ class ToJsonTypeConverter
                     return $fieldName;
                 }
                 if ($type->getTypeIdentifier()->value === 'array') {
-                    return $fieldName.'.map((e) => e.toJson()).toList()';
+                    throw new \LogicException(sprintf('The array property "%s" is missing a specific type. Please add a PHPDoc to specify its elements (e.g., /** @var MyDto[] */).', $fieldName));
                 }
                 if ($type->getTypeIdentifier()->value === 'bool') {
                     return $fieldName;
@@ -89,11 +86,13 @@ class ToJsonTypeConverter
                 return '\\'.$type->getClassName();
             case CollectionType::class:
                 /** @var CollectionType $type */
-                if ($type->isList()) {
-                    return $this->convertType($fieldName, $type->getWrappedType());
+                $valueType = $type->getCollectionValueType();
+                if ($valueType && !($valueType instanceof BuiltinType && $valueType->getTypeIdentifier()->value === 'mixed')) {
+                    $mappedE = $this->convertType('e', $valueType);
+                    return $fieldName.'.map((e) => '.$mappedE.').toList()';
                 }
 
-                return $this->convertType($fieldName, $type->getWrappedType());
+                throw new \LogicException(sprintf('The collection/array property "%s" is missing a specific type. Please add a PHPDoc to specify its elements (e.g., /** @var MyDto[] */).', $fieldName));
             case GenericType::class:
                 /** @var GenericType $type */
                 return $this->convertType($fieldName, $type->getWrappedType());
