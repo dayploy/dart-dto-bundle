@@ -35,6 +35,8 @@ class MyClass
 
     private ?StringValuesEnum $stringEnumNullable;
 
+    private ?Uuid $uuidNullable;
+
     #[DartDtoIgnore]
     private string $propertyToIgnore;
 }
