@@ -18,6 +18,8 @@ class MyClass {
   late final StringValuesEnum stringEnum;
   late final StringValuesEnum? stringEnumNullable;
   late final UuidValue? uuidNullable;
+  late final List<ForeignClass> dtoList;
+  late final List<UuidValue> uuidList;
 
   MyClass({
     required this.id,
@@ -33,6 +35,8 @@ class MyClass {
     required this.stringEnum,
     this.stringEnumNullable,
     this.uuidNullable,
+    required this.dtoList,
+    required this.uuidList,
   });
 
   Map<String, dynamic> toJson() {
@@ -43,13 +47,15 @@ class MyClass {
       "maDate": ApiDateService.convertToApi(maDate),
       "name": name,
       "nullableString": nullableString,
-      "foreignClasses": List,
+      "foreignClasses": foreignClasses.map((e) => e.toJson()).toList(),
       "singleForeignClass": singleForeignClass.toJson(),
-      "references": references.map((e) => e.toJson()).toList(),
+      "references": references.map((e) => e).toList(),
       "intEnum": intEnum.value,
       "stringEnum": stringEnum.value,
       "stringEnumNullable": stringEnumNullable?.value,
       "uuidNullable": uuidNullable?.toString(),
+      "dtoList": dtoList.map((e) => e.toJson()).toList(),
+      "uuidList": uuidList.map((e) => e.toString()).toList(),
     };
   }
 }

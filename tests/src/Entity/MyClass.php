@@ -37,6 +37,16 @@ class MyClass
 
     private ?Uuid $uuidNullable;
 
+    /**
+     * @var ForeignClass[]
+     */
+    private array $dtoList;
+
+    /**
+     * @var Uuid[]
+     */
+    private array $uuidList;
+
     #[DartDtoIgnore]
     private string $propertyToIgnore;
 }
