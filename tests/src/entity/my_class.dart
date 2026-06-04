@@ -39,6 +39,74 @@ class MyClass {
     required this.uuidList,
   });
 
+  MyClass.construct();
+
+  factory MyClass.fromJson(Map<String, dynamic> json) {
+    final entity = MyClass.construct();
+
+    if (json.containsKey('id')) {
+      entity.id = UuidValue.fromString(json['id'] as String);
+    }
+
+    if (json.containsKey('numberInt')) {
+      entity.numberInt = json['numberInt'] as int;
+    }
+
+    if (json.containsKey('numberFloat')) {
+      entity.numberFloat = json['numberFloat'] as double;
+    }
+
+    if (json.containsKey('maDate')) {
+      entity.maDate = DateTime.parse(json['maDate'] as String);
+    }
+
+    if (json.containsKey('name')) {
+      entity.name = json['name'] as String;
+    }
+
+    if (json.containsKey('nullableString')) {
+      entity.nullableString = json['nullableString'] != null ? json['nullableString'] as String : null;
+    }
+
+    if (json.containsKey('foreignClasses')) {
+      entity.foreignClasses = (json['foreignClasses'] as List<dynamic>).map((e) => ForeignClass.fromJson(e as Map<String, dynamic>)).toList();
+    }
+
+    if (json.containsKey('singleForeignClass')) {
+      entity.singleForeignClass = ForeignClass.fromJson(json['singleForeignClass'] as Map<String, dynamic>);
+    }
+
+    if (json.containsKey('references')) {
+      entity.references = (json['references'] as List<dynamic>).map((e) => e as int).toList();
+    }
+
+    if (json.containsKey('intEnum')) {
+      entity.intEnum = IntValuesEnum.fromValue(json['intEnum']);
+    }
+
+    if (json.containsKey('stringEnum')) {
+      entity.stringEnum = StringValuesEnum.fromValue(json['stringEnum']);
+    }
+
+    if (json.containsKey('stringEnumNullable')) {
+      entity.stringEnumNullable = json['stringEnumNullable'] != null ? StringValuesEnum.fromValue(json['stringEnumNullable']) : null;
+    }
+
+    if (json.containsKey('uuidNullable')) {
+      entity.uuidNullable = json['uuidNullable'] != null ? UuidValue.fromString(json['uuidNullable'] as String) : null;
+    }
+
+    if (json.containsKey('dtoList')) {
+      entity.dtoList = (json['dtoList'] as List<dynamic>).map((e) => ForeignClass.fromJson(e as Map<String, dynamic>)).toList();
+    }
+
+    if (json.containsKey('uuidList')) {
+      entity.uuidList = (json['uuidList'] as List<dynamic>).map((e) => UuidValue.fromString(e as String)).toList();
+    }
+
+    return entity;
+  }
+
   Map<String, dynamic> toJson() {
     return {
       "id": id.toString(),
