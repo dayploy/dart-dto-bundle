@@ -32,11 +32,11 @@ class <entityClassName> {
 ';
 
     private static string $fromJsonTemplate = '
-  <entityClassName>.toJson();
+  <entityClassName>.construct();
 
 
   factory <entityClassName>.fromJson(Map<String, dynamic> json) {
-    final entity = <entityClassName>.toJson();
+    final entity = <entityClassName>.construct();
 
     <generateFromJsonParameters>
 

@@ -5,7 +5,7 @@ namespace Dayploy\DartDtoBundle\Tests\src\Entity;
 use Symfony\Component\Uid\Uuid;
 use Dayploy\DartDtoBundle\Attributes\DartDto;
 
-#[DartDto(generateToJson: true)]
+#[DartDto(generateToJson: true, generateFromJson: true)]
 class ForeignClass
 {
     private Uuid $id;

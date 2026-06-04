@@ -7,7 +7,7 @@ use Symfony\Component\Uid\Uuid;
 use Dayploy\DartDtoBundle\Attributes\DartDto;
 use Dayploy\DartDtoBundle\Attributes\DartDtoIgnore;
 
-#[DartDto(generateToJson: true)]
+#[DartDto(generateToJson: true, generateFromJson: true)]
 class MyClass
 {
     private Uuid $id;
