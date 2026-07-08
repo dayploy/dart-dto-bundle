@@ -20,6 +20,7 @@ class MyClass {
   late final UuidValue? uuidNullable;
   late final List<ForeignClass> dtoList;
   late final List<UuidValue> uuidList;
+  late final List<IntValuesEnum> intEnumList;
 
   MyClass({
     required this.id,
@@ -37,6 +38,7 @@ class MyClass {
     this.uuidNullable,
     required this.dtoList,
     required this.uuidList,
+    required this.intEnumList,
   });
 
   MyClass.construct();
@@ -104,6 +106,10 @@ class MyClass {
       entity.uuidList = (json['uuidList'] as List<dynamic>).map((e) => UuidValue.fromString(e as String)).toList();
     }
 
+    if (json.containsKey('intEnumList')) {
+      entity.intEnumList = (json['intEnumList'] as List<dynamic>).map((e) => IntValuesEnum.fromValue(e)).toList();
+    }
+
     return entity;
   }
 
@@ -124,6 +130,7 @@ class MyClass {
       "uuidNullable": uuidNullable?.toString(),
       "dtoList": dtoList.map((e) => e.toJson()).toList(),
       "uuidList": uuidList.map((e) => e.toString()).toList(),
+      "intEnumList": intEnumList.map((e) => e.value).toList(),
     };
   }
 }
