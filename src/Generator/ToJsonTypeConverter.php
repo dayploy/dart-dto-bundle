@@ -45,6 +45,9 @@ class ToJsonTypeConverter
                 if ($type->getClassName() === File::class) {
                     return 'String';
                 }
+                if (is_subclass_of($type->getClassName(), \BackedEnum::class)) {
+                    return $fieldName.'.value';
+                }
 
                 return $fieldName.'.toJson()';
             case BuiltinType::class:

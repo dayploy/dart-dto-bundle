@@ -47,6 +47,11 @@ class MyClass
      */
     private array $uuidList;
 
+    /**
+     * @var IntValuesEnum[]
+     */
+    private array $intEnumList;
+
     #[DartDtoIgnore]
     private string $propertyToIgnore;
 }

@@ -60,6 +60,10 @@ class FromJsonTypeConverter
                     classname: $type->getClassName(),
                 );
 
+                if (is_subclass_of($type->getClassName(), \BackedEnum::class)) {
+                    return sprintf('%s.fromValue(%s)', $classname, $expression);
+                }
+
                 return sprintf('%s.fromJson(%s as Map<String, dynamic>)', $classname, $expression);
             case BuiltinType::class:
                 /** @var BuiltinType $type */
