@@ -45,7 +45,6 @@ class FromJsonTypeConverter
                     throw new \LogicException('The Collection property is missing a specific type. Please add a PHPDoc to specify its elements (e.g., /** @var MyDto[] */).');
                 }
                 if ($type->getClassName() === DateTimeImmutable::class) {
-                    $this->filenameService->addApiDateServiceImport();
                     return sprintf('DateTime.parse(%s as String)', $expression);
                 }
 
@@ -109,7 +108,7 @@ class FromJsonTypeConverter
             case CollectionType::class:
                 /** @var CollectionType $type */
                 $valueType = $type->getCollectionValueType();
-                
+
                 if ($valueType && !($valueType instanceof BuiltinType && $valueType->getTypeIdentifier()->value === 'mixed')) {
                     $mappedE = $this->parseExpression('e', $valueType);
                     return sprintf('(%s as List<dynamic>).map((e) => %s).toList()', $expression, $mappedE);
