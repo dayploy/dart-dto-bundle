@@ -29,7 +29,7 @@ class ForeignClass {
   Map<String, dynamic> toJson() {
     return {
       "id": id.toString(),
-      "myClass": myClass.toJson()?,
+      "myClass": myClass?.toJson(),
     };
   }
 }

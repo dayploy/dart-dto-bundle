@@ -13,6 +13,9 @@ class MyClass {
   late final String? nullableString;
   late final List<ForeignClass> foreignClasses;
   late final ForeignClass singleForeignClass;
+  late final ForeignClass? nullableForeignClass;
+  late final String file;
+  late final String? nullableFile;
   late final List<int> references;
   late final IntValuesEnum intEnum;
   late final StringValuesEnum stringEnum;
@@ -31,6 +34,9 @@ class MyClass {
     this.nullableString,
     required this.foreignClasses,
     required this.singleForeignClass,
+    this.nullableForeignClass,
+    required this.file,
+    this.nullableFile,
     required this.references,
     required this.intEnum,
     required this.stringEnum,
@@ -78,6 +84,18 @@ class MyClass {
       entity.singleForeignClass = ForeignClass.fromJson(json['singleForeignClass'] as Map<String, dynamic>);
     }
 
+    if (json.containsKey('nullableForeignClass')) {
+      entity.nullableForeignClass = json['nullableForeignClass'] != null ? ForeignClass.fromJson(json['nullableForeignClass'] as Map<String, dynamic>) : null;
+    }
+
+    if (json.containsKey('file')) {
+      entity.file = json['file'] as String;
+    }
+
+    if (json.containsKey('nullableFile')) {
+      entity.nullableFile = json['nullableFile'] != null ? json['nullableFile'] as String : null;
+    }
+
     if (json.containsKey('references')) {
       entity.references = (json['references'] as List<dynamic>).map((e) => e as int).toList();
     }
@@ -123,6 +141,9 @@ class MyClass {
       "nullableString": nullableString,
       "foreignClasses": foreignClasses.map((e) => e.toJson()).toList(),
       "singleForeignClass": singleForeignClass.toJson(),
+      "nullableForeignClass": nullableForeignClass?.toJson(),
+      "file": file,
+      "nullableFile": nullableFile,
       "references": references.map((e) => e).toList(),
       "intEnum": intEnum.value,
       "stringEnum": stringEnum.value,

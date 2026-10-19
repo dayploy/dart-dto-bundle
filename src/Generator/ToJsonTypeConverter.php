@@ -39,11 +39,8 @@ class ToJsonTypeConverter
                     return 'ApiDateService.convertToApi('.$fieldName.')';
                 }
 
-                if ($type->getClassName() === UploadedFile::class) {
-                    return 'String';
-                }
-                if ($type->getClassName() === File::class) {
-                    return 'String';
+                if ($this->isFile($type)) {
+                    return $fieldName;
                 }
                 if (is_subclass_of($type->getClassName(), \BackedEnum::class)) {
                     return $fieldName.'.value';
@@ -117,11 +114,32 @@ class ToJsonTypeConverter
                 if ($wrappedType instanceof BackedEnumType) {
                     return $fieldName.'?.value';
                 }
+                if ($wrappedType instanceof ObjectType) {
+                    if ($this->isFile($wrappedType)) {
+                        return $this->convertType($fieldName, $wrappedType);
+                    }
+
+                    // a nullable object is reached with `?.`: the question mark belongs to the
+                    // receiver, not to the whole expression. The generic fallback below appends
+                    // it at the end and produces `field.toJson()?`, which does not compile.
+                    return $fieldName.'?.toJson()';
+                }
 
                 /** @var NullableType $type */
                 return $this->convertType($fieldName, $type->getWrappedType()).'?';
         }
 
         throw new \LogicException('Class '.$type::class.' not handled');
+    }
+
+    /**
+     * A file travels as a plain string, its path or its url: the generated field is a String, so
+     * it is written out as is. No call, hence no null aware operator when it is nullable.
+     */
+    private function isFile(
+        ObjectType $type,
+    ): bool {
+        return $type->getClassName() === UploadedFile::class
+            || $type->getClassName() === File::class;
     }
 }

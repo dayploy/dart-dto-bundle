@@ -3,6 +3,7 @@
 namespace Dayploy\DartDtoBundle\Tests\src\Entity;
 
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Uid\Uuid;
 use Dayploy\DartDtoBundle\Attributes\DartDto;
 use Dayploy\DartDtoBundle\Attributes\DartDtoIgnore;
@@ -24,6 +25,11 @@ class MyClass
     private Collection $foreignClasses;
 
     private ForeignClass $singleForeignClass;
+
+    private ?ForeignClass $nullableForeignClass;
+
+    private File $file;
+    private ?File $nullableFile;
 
     /**
      * @var array<int>
