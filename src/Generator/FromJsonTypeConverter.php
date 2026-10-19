@@ -48,11 +48,11 @@ class FromJsonTypeConverter
                     return sprintf('DateTime.parse(%s as String)', $expression);
                 }
 
-                if ($type->getClassName() === UploadedFile::class) {
-                    return 'String';
-                }
-                if ($type->getClassName() === File::class) {
-                    return 'String';
+                // a file travels as a plain string (its path or url), not as an object: it is
+                // read back like any string. Returning the bare type name produced
+                // `entity.file = String;`, which does not compile.
+                if ($type->getClassName() === UploadedFile::class || $type->getClassName() === File::class) {
+                    return sprintf('%s as String', $expression);
                 }
 
                 $classname = $this->filenameService->getObjectFromClassname(
