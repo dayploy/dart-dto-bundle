@@ -13,7 +13,12 @@ jobs:
       matrix:
         operating-system: [ ubuntu-latest ]
         php: [ '8.4' ]
-        symfony: ['7.4.*','8.0.*']
+        # Symfony 8.0 is left out on purpose: the whole 8.0.x branch of
+        # symfony/http-foundation is affected by CVE-2026-108082 and never got a
+        # patched release (the fix landed in 7.4.19 and 8.1.7 only). Composer
+        # refuses to resolve a package under an advisory, so that leg of the
+        # matrix can no longer install anything. We test maintained branches.
+        symfony: ['7.4.*','8.1.*']
     steps:
       - uses: actions/checkout@main
 
