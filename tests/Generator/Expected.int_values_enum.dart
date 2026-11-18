@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 enum IntValuesEnum {
   none(0),
   warning(10),
@@ -7,6 +8,12 @@ enum IntValuesEnum {
   const IntValuesEnum(this.value);
 
   factory IntValuesEnum.fromValue(String value) {
-    return IntValuesEnum.values.firstWhere((e) => e.value == value);
+    final enumValue = IntValuesEnum.values.firstWhereOrNull(
+      (e) => e.value == value,
+    );
+    if (enumValue == null) {
+      throw "ENUM IntValuesEnum HAS NO MAPPING FOR VALUE $value";
+    }
+    return enumValue;
   }
 }

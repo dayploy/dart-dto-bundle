@@ -7,6 +7,8 @@ use ReflectionClass;
 class EnumGenerator
 {
     private static string $classTemplate = '
+import \'package:collection/collection.dart\';
+
 enum <entityClassName> {
 <entityBody>
 
@@ -16,7 +18,15 @@ enum <entityClassName> {
 
 
   factory <entityClassName>.fromValue(String value) {
-    return <entityClassName>.values.firstWhere((e) => e.value == value);
+    final enumValue = <entityClassName>.values.firstWhereOrNull(
+      (e) => e.value == value,
+    );
+
+    if (enumValue == null) {
+      throw "ENUM <entityClassName> HAS NO MAPPING FOR VALUE $value";
+    }
+
+    return enumValue;
   }
 }
 ';
